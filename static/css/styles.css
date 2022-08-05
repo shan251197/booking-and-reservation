@@ -1,0 +1,19 @@
+.my-footer {
+    background-color: rgb(104, 104, 104);
+    color: white;
+    height: 4rem;
+    margin: 1rem auto;
+}
+
+.room-image {
+    max-width: 50%;
+}
+
+.form_html {
+    width: 430px;
+    margin: auto;
+}
+
+.swal2-actions {
+    z-index: 0 !important;
+}
