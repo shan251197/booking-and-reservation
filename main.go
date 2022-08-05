@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/shan251197/booking-and-reservation/internal/config"
 	"github.com/shan251197/booking-and-reservation/internal/handlers"
+	"github.com/shan251197/booking-and-reservation/internal/helpers"
 	"github.com/shan251197/booking-and-reservation/internal/models"
 	"github.com/shan251197/booking-and-reservation/internal/render"
 )
@@ -19,6 +21,9 @@ const portNumber = ":8000"
 var app config.AppConfig
 
 var session *scs.SessionManager
+
+var infoLog *log.Logger
+var errorLog *log.Logger
 
 func main() {
 
@@ -47,6 +52,12 @@ func run() error {
 
 	app.InProduction = false
 
+	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
+
+	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
+
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
 	session.Cookie.Persist = true
@@ -69,6 +80,7 @@ func run() error {
 	handlers.NewHandlers(repo)
 
 	render.NewTemplates(&app)
+	helpers.NewHelpers(&app)
 
 	return nil
 }
